@@ -29,92 +29,71 @@ public class MainActivity extends Activity implements OnClickListener {
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        try {setw();} catch (Exception e) {}
+        try {
+            setw();
+        }
+        catch (Exception e) {}
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void setw() throws IOException
-    {
+    private void setw() throws IOException {
         t1=(TextView)findViewById(R.id.textView1);
         bluetooth_connect_device();
 
-
-
         i1=(Button)findViewById(R.id.button1);
 
-        i1.setOnTouchListener(new View.OnTouchListener()
-        {   @Override
+        i1.setOnTouchListener(new View.OnTouchListener() {   @Override
         public boolean onTouch(View v, MotionEvent event){
             if(event.getAction() == MotionEvent.ACTION_DOWN) {led_on_off("f");}
             if(event.getAction() == MotionEvent.ACTION_UP){led_on_off("b");}
             return true;}
         });
-
     }
 
-    private void bluetooth_connect_device() throws IOException
-    {
-        try
-        {
+    private void bluetooth_connect_device() throws IOException {
+        try {
             myBluetooth = BluetoothAdapter.getDefaultAdapter();
             address = myBluetooth.getAddress();
             pairedDevices = myBluetooth.getBondedDevices();
-            if (pairedDevices.size()>0)
-            {
-                for(BluetoothDevice bt : pairedDevices)
-                {
+            if (pairedDevices.size()>0) {
+                for(BluetoothDevice bt : pairedDevices) {
                     address=bt.getAddress().toString();name = bt.getName().toString();
                     Toast.makeText(getApplicationContext(),"Connected", Toast.LENGTH_SHORT).show();
-
                 }
             }
-
         }
         catch(Exception we){}
+
         myBluetooth = BluetoothAdapter.getDefaultAdapter();//get the mobile bluetooth device
         BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);//connects to the device's address and checks if it's available
         btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
         btSocket.connect();
-        try { t1.setText("BT Name: "+name+"\nBT Address: "+address); }
+
+        try {
+            t1.setText("BT Name: "+name+"\nBT Address: "+address);
+        }
         catch(Exception e){}
     }
 
     @Override
-    public void onClick(View v)
-    {
-        try
-        {
-
-        }
-        catch (Exception e)
-        {
+    public void onClick(View v) {
+        try {}
+        catch (Exception e) {
             Toast.makeText(getApplicationContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
-
         }
-
     }
 
-    private void led_on_off(String i)
-    {
-        try
-        {
-            if (btSocket!=null)
-            {
-
+    private void led_on_off(String i) {
+        try {
+            if (btSocket!=null) {
                 btSocket.getOutputStream().write(i.toString().getBytes());
             }
-
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Toast.makeText(getApplicationContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
-
         }
-
     }
-
 }
