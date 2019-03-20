@@ -9,19 +9,28 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
-    Button button;
+    Button onOff,
+           upload,
+           run;
     TextView textView;
+    EditText daysEditText,
+             onEditText,
+             offEditText;
+    boolean isTorchOn = false;
 
     String address = null,
-           name = null;
+           name = null,
+            days,
+            onTime,
+            offTime;
 
     BluetoothAdapter myBluetooth = null;
     BluetoothSocket btSocket = null;
@@ -32,6 +41,11 @@ public class MainActivity extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        daysEditText = findViewById(R.id.days_text);
+        onEditText = findViewById(R.id.on_text);
+        offEditText = findViewById(R.id.off_text);
+
         try {
             setup();
         }
@@ -40,19 +54,56 @@ public class MainActivity extends Activity implements OnClickListener {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setup() throws IOException {
-        textView = (TextView)findViewById(R.id.textView1);
+        textView = (TextView)findViewById(R.id.address_text);
         connectToBT();
 
-        button = (Button)findViewById(R.id.button1);
-        button.setOnTouchListener(new View.OnTouchListener() {@Override
-        public boolean onTouch(View v, MotionEvent event){
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                sendToBT("f"); // LED ON
+        upload = (Button)findViewById(R.id.upload_button);
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                days = daysEditText.getText().toString();
+                onTime = onEditText.getText().toString();
+                offTime = offEditText.getText().toString();
+
+                sendToBT("u");
+
+                for(int i=0; i<days.length(); i++)
+                    sendToBT(String.valueOf(days.charAt(i)));
+                sendToBT(",");
+
+                for(int i=0; i<onTime.length(); i++)
+                    sendToBT(String.valueOf(onTime.charAt(i)));
+                sendToBT(",");
+
+                for(int i=0; i<offTime.length(); i++)
+                    sendToBT(String.valueOf(offTime.charAt(i)));
+
+          //      sendToBT(days);
+          //      sendToBT(onTime);
+          //      sendToBT(offTime);
+                sendToBT("#");
             }
-            if(event.getAction() == MotionEvent.ACTION_UP){
-                sendToBT("b"); // LED OFF
+        });
+
+        run = (Button)findViewById(R.id.run_button);
+        run.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendToBT("r");
             }
-            return true;
+        });
+
+        onOff = (Button)findViewById(R.id.on_off_button);
+        onOff.setOnClickListener(new View.OnClickListener() { @Override
+        public void onClick(View v) {
+            if(!isTorchOn) {
+                sendToBT("n"); // LED ON
+                isTorchOn = true;
+            }
+            else{
+                sendToBT("f"); // LED OFF
+                isTorchOn = false;
+            }
         }
         });
     }
@@ -65,7 +116,8 @@ public class MainActivity extends Activity implements OnClickListener {
             pairedDevices = myBluetooth.getBondedDevices();
             if (pairedDevices.size() > 0) {
                 for(BluetoothDevice bt : pairedDevices) {
-                    address = bt.getAddress().toString();name = bt.getName().toString();
+                    address = bt.getAddress().toString();
+                    name = bt.getName().toString();
                     Toast.makeText(getApplicationContext(),"Connected", Toast.LENGTH_SHORT)
                             .show();
                 }
