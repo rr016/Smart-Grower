@@ -24,13 +24,13 @@ public class MainActivity extends Activity implements OnClickListener {
     EditText daysEditText,
              onEditText,
              offEditText;
-    boolean isTorchOn = false;
 
+    boolean isTorchOn = false;
     String address = null,
            name = null,
-            days,
-            onTime,
-            offTime;
+           days,
+           onTime,
+           offTime;
 
     BluetoothAdapter myBluetooth = null;
     BluetoothSocket btSocket = null;
@@ -54,9 +54,11 @@ public class MainActivity extends Activity implements OnClickListener {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setup() throws IOException {
+        // Connects to BlueTooth device and updates textView at the bottm
         textView = (TextView)findViewById(R.id.address_text);
         connectToBT();
 
+        // Upload button sends scheduling info to BlueTooth
         upload = (Button)findViewById(R.id.upload_button);
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,14 +79,15 @@ public class MainActivity extends Activity implements OnClickListener {
 
                 for(int i=0; i<offTime.length(); i++)
                     sendToBT(String.valueOf(offTime.charAt(i)));
-
-          //      sendToBT(days);
-          //      sendToBT(onTime);
-          //      sendToBT(offTime);
                 sendToBT("#");
+
+                daysEditText.getText().clear();
+                onEditText.getText().clear();
+                offEditText.getText().clear();
             }
         });
 
+        // Run button sends signal to start to BlueTooth
         run = (Button)findViewById(R.id.run_button);
         run.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,18 +96,20 @@ public class MainActivity extends Activity implements OnClickListener {
             }
         });
 
+        // On/Off button sends manuel signals to BlueTooth
         onOff = (Button)findViewById(R.id.on_off_button);
-        onOff.setOnClickListener(new View.OnClickListener() { @Override
-        public void onClick(View v) {
-            if(!isTorchOn) {
-                sendToBT("n"); // LED ON
-                isTorchOn = true;
+        onOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!isTorchOn) {
+                    sendToBT("n"); // LED ON
+                    isTorchOn = true;
+                }
+                else{
+                    sendToBT("f"); // LED OFF
+                    isTorchOn = false;
+                }
             }
-            else{
-                sendToBT("f"); // LED OFF
-                isTorchOn = false;
-            }
-        }
         });
     }
 
@@ -129,24 +134,16 @@ public class MainActivity extends Activity implements OnClickListener {
         myBluetooth = BluetoothAdapter.getDefaultAdapter();
 
         // Connects to device's address and checks if it's available
-        BluetoothDevice dispositivo = myBluetooth.getRemoteDevice(address);
+        BluetoothDevice BTdevice = myBluetooth.getRemoteDevice(address);
 
         // Create a RFCOMM (SPP) connection
-        btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);
+        btSocket = BTdevice.createInsecureRfcommSocketToServiceRecord(myUUID);
         btSocket.connect();
 
         try {
             textView.setText("BT Name: "+name+"\nBT Address: "+address);
         }
         catch(Exception e){}
-    }
-
-    @Override
-    public void onClick(View v) {
-        try {}
-        catch (Exception e) {
-            Toast.makeText(getApplicationContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 
     // Sends output to BlueTooth through created socket
@@ -156,6 +153,14 @@ public class MainActivity extends Activity implements OnClickListener {
                 btSocket.getOutputStream().write(output.toString().getBytes());
             }
         }
+        catch (Exception e) {
+            Toast.makeText(getApplicationContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        try {}
         catch (Exception e) {
             Toast.makeText(getApplicationContext(),e.getMessage(), Toast.LENGTH_SHORT).show();
         }

@@ -3,94 +3,105 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ggf"
+    android:background="@drawable/background_smartgrower"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.android.smartgrower.MainActivity" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="16dp"
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/logo_smartgrower"
+        app:layout_constraintBottom_toTopOf="@+id/days_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/days_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="Days" />
+    <EditText
+        android:id="@+id/days_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:ems="10"
+        android:hint="Days"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/on_text"
+        app:layout_constraintStart_toStartOf="@+id/on_text"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/on_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="Hours On" />
+    <EditText
+        android:id="@+id/on_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Hours On"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/off_text"
+        app:layout_constraintStart_toStartOf="@+id/off_text"
+        app:layout_constraintTop_toBottomOf="@+id/days_text" />
 
-        <EditText
-            android:id="@+id/off_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint="Hours Off" />
+    <EditText
+        android:id="@+id/off_text"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="39dp"
+        android:ems="10"
+        android:hint="Hours Off"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/on_text" />
 
-        <Button
-            android:id="@+id/upload_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            android:text="Upload"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="85dp" />
+    <Button
+        android:id="@+id/upload_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Add to schedule"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/off_text" />
 
-        <Button
-            android:id="@+id/run_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp"
-            android:text="Run"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="213dp" />
+    <Button
+        android:id="@+id/run_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Run"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upload_button" />
 
-        <Button
-            android:id="@+id/on_off_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="32dp"
-            android:text="ON-OFF" />
+    <Button
+        android:id="@+id/on_off_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="128dp"
+        android:text="1/0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/run_button" />
 
-        <TextView
-            android:id="@+id/address_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="46dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="43dp"
-            android:text="BlueTooth Address" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/address_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="24dp"
+        android:text="BlueTooth Address"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
